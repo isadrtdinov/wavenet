@@ -8,7 +8,7 @@ class Params:
     device = None  # to be set on runtime
 
     # wandb params
-    use_wandb = False
+    use_wandb = True
     wandb_project = 'wavenet'
 
     # data location
@@ -47,11 +47,12 @@ class Params:
 
     # optimizer params
     lr = 3e-4
-    weight_decay = 1e-4
+    weight_decay = 1e-5
 
     # training params
     start_epoch = 1
-    num_epochs = 20
+    num_epochs = 10
+    log_steps = 500
     batch_size = 6
 
 

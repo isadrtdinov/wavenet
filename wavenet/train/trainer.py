@@ -15,6 +15,9 @@ class Trainer(object):
         self.spectrogramer = MelSpectrogram(params).to(params.device)
         self.quantizer = MuLawQuantization(params.mu).to(params.device)
         self.criterion = nn.CrossEntropyLoss()
+        self.train_step = 0
+        self.train_loss, self.train_accuracy = 0.0, 0.0
+        self.valid_loss, self.valid_accuracy = 0.0, 0.0
 
         if params.use_wandb:
             wandb.init(project=params.wandb_project)
@@ -34,12 +37,14 @@ class Trainer(object):
         self.model.load_state_dict(checkpoint['model_state_dict'])
         self.optimizer.load_state_dict(checkpoint['optim_state_dict'])
 
-    def log_metrics(self, train_metrics, valid_metrics):
-        wandb.log({'train loss': train_metrics[0], 'train accuracy': train_metrics[1],
-                   'valid loss': valid_metrics[0], 'valid accuracy': valid_metrics[1]})
+    def log_train(self):
+        wandb.log({'train loss': self.train_loss, 'train accuracy': self.train_accuracy})
+
+    def log_valid(self):
+        wandb.log({'valid loss': self.valid_loss, 'valid accuracy': self.valid_accuracy})
 
     def process_epoch(self, loader, train=True):
-        running_loss, running_accuracy = 0.0, 0.0
+        self.model.train() if train else self.model.eval()
 
         for waveforms in loader:
             with torch.no_grad():
@@ -52,6 +57,7 @@ class Trainer(object):
                 targets = self.quantizer.quantize(mu_law[:, 1:])
 
             with torch.set_grad_enabled(train):
+                self.optimizer.zero_grad()
                 logits = self.model(inputs, melspecs)
                 targets = targets[:, :logits.shape[-1]]
                 loss = self.criterion(logits, targets)
@@ -60,18 +66,28 @@ class Trainer(object):
             if train:
                 loss.backward()
                 self.optimizer.step()
+                self.train_loss += loss.item() * waveforms.shape[0]
+                self.train_accuracy += accuracy.item() * waveforms.shape[0]
 
-            running_loss += loss.item() * waveforms.shape[0]
-            running_accuracy += accuracy.item() * waveforms.shape[0]
+                self.train_step += 1
+                if self.train_step % self.params.log_steps == 0:
+                    self.train_loss /= self.params.log_steps
+                    self.train_accuracy /= self.params.log_steps
+                    if self.params.use_wandb:
+                        self.log_train()
+                    self.train_loss, self.train_accuracy = 0.0, 0.0
 
-        running_loss /= len(loader.dataset)
-        running_accuracy /= len(loader.dataset)
-        return running_loss, running_accuracy
+            else:
+                self.valid_loss += loss.item() * waveforms.shape[0]
+                self.valid_accuracy += accuracy.item() * waveforms.shape[0]
+
+        if not train:
+            self.valid_loss /= len(loader.dataset)
+            self.valid_accuracy /= len(loader.dataset)
+            if self.params.use_wandb:
+                self.log_valid()
 
     def train(self, train_loader, valid_loader):
         for epoch in range(self.params.start_epoch, self.params.start_epoch + self.params.num_epochs):
-            train_metrics = self.process_epoch(train_loader, train=True)
-            valid_metrics = self.process_epoch(valid_loader, train=False)
-
-            if self.params.use_wandb:
-                self.log_metrics(train_metrics, valid_metrics)
+            self.process_epoch(train_loader, train=True)
+            self.process_epoch(valid_loader, train=False)
