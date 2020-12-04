@@ -54,7 +54,7 @@ class Trainer(object):
                 mu_law = self.quantizer(waveforms)
                 zeros = torch.zeros((mu_law.shape[0], 1)).to(self.params.device)
                 inputs = torch.cat([zeros, mu_law[:, :-1]], dim=1)
-                targets = self.quantizer.quantize(mu_law[:, 1:])
+                targets = self.quantizer.quantize(mu_law)
 
             with torch.set_grad_enabled(train):
                 self.optimizer.zero_grad()
