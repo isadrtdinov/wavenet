@@ -47,7 +47,7 @@ class Params:
 
     # optimizer params
     lr = 3e-4
-    weight_decay = 1e-5
+    weight_decay = 0.0
 
     # training params
     start_epoch = 1
