@@ -86,6 +86,7 @@ class Trainer(object):
             self.valid_accuracy /= len(loader.dataset)
             if self.params.use_wandb:
                 self.log_valid()
+            self.valid_loss, self.valid_accuracy = 0.0, 0.0
 
     def train(self, train_loader, valid_loader):
         for epoch in range(self.params.start_epoch, self.params.start_epoch + self.params.num_epochs):
