@@ -2,6 +2,7 @@ import random
 import numpy as np
 import pandas as pd
 import torch
+from torch import nn
 
 
 def set_random_seed(seed):
@@ -10,6 +11,12 @@ def set_random_seed(seed):
     torch.cuda.manual_seed(seed)
     random.seed(seed)
     np.random.seed(seed)
+
+
+def init_xavier(layer):
+    nn.init.xavier_uniform_(layer.weight)
+    if layer.bias is not None:
+        nn.init.constant_(layer.bias, 0)
 
 
 def load_data(filename):

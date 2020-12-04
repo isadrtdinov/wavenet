@@ -1,6 +1,7 @@
 import torch
 from torch import nn
 from .layers import WaveNetBlock
+from ..utils.utils import init_xavier
 
 
 class WaveNet(nn.Module):
@@ -31,6 +32,11 @@ class WaveNet(nn.Module):
             nn.ReLU(),
             nn.Conv1d(num_quants, num_quants, kernel_size=1),
         )
+
+        init_xavier(self.upsample)
+        init_xavier(self.input_conv)
+        init_xavier(self.head[1])
+        init_xavier(self.head[3])
 
     def forward(self, waveforms, melspecs):
         # waveforms: (batch_size, audio_length)

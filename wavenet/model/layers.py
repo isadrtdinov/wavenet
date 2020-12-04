@@ -1,5 +1,6 @@
 import torch
 from torch import nn
+from ..utils.utils import init_xavier
 
 
 class CausalConv1d(nn.Module):
@@ -8,6 +9,7 @@ class CausalConv1d(nn.Module):
         self.padding = dilation * (kernel - 1)
         self.conv = nn.Conv1d(in_channels, out_channels, kernel_size=kernel,
                               dilation=dilation, padding=self.padding)
+        init_xavier(self.conv)
 
     def forward(self, inputs):
         return self.conv(inputs)[..., :-self.padding]
@@ -22,6 +24,10 @@ class WaveNetBlock(nn.Module):
         self.conditional_conv = nn.Conv1d(num_mels, 2 * residual_channels, kernel_size=1)
         self.skip_conv = nn.Conv1d(2 * residual_channels, skip_channels, kernel_size=1)
         self.residual_conv = nn.Conv1d(2 * residual_channels, residual_channels, kernel_size=1)
+
+        init_xavier(self.conditional_conv)
+        init_xavier(self.skip_conv)
+        init_xavier(self.residual_conv)
 
     def forward(self, inputs, conditions):
         # inputs: (batch_size, residual_channels, audio_length)
