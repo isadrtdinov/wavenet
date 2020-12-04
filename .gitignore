@@ -1,6 +1,8 @@
 # Project
 .idea/
 wandb/
+checkpoints/
+ljspeech/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -53,10 +53,11 @@ class Trainer(object):
 
             with torch.set_grad_enabled(train):
                 logits = self.model(inputs, melspecs)
+                targets = targets[:, :logits.shape[-1]]
                 loss = self.criterion(logits, targets)
-                accuracy = (torch.argmax(logits, dim=1) == targets).mean()
+                accuracy = (torch.argmax(logits, dim=1) == targets).to(torch.float).mean()
 
-            if self.train():
+            if train:
                 loss.backward()
                 self.optimizer.step()
 

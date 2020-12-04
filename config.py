@@ -8,7 +8,7 @@ class Params:
     device = None  # to be set on runtime
 
     # wandb params
-    use_wandb = True
+    use_wandb = False
     wandb_project = 'wavenet'
 
     # data location
@@ -23,7 +23,7 @@ class Params:
 
     # data processing
     valid_ratio = 0.05
-    audio_length = 65536
+    audio_length = 16384
 
     # melspectogramer params
     sample_rate = 22050
@@ -35,7 +35,7 @@ class Params:
     num_mels = 80
     power = 1.0
     pad_value = 1e-5
-    mu = 256.0
+    mu = 256
 
     # WaveNet params
     upsample_kernel = 800
@@ -52,7 +52,7 @@ class Params:
     # training params
     start_epoch = 1
     num_epochs = 20
-    batch_size = 16
+    batch_size = 6
 
 
 def set_params():

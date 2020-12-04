@@ -5,7 +5,7 @@ from torch import nn
 class MuLawQuantization(nn.Module):
     def __init__(self, mu):
         super().__init__()
-        self.mu = nn.Parameter(torch.tensor([mu]), requires_grad=False)
+        self.mu = nn.Parameter(torch.tensor([mu], dtype=torch.float), requires_grad=False)
         self.eps = 1e-4
 
     def forward(self, x):

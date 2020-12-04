@@ -23,6 +23,7 @@ class WaveNet(nn.Module):
             self.blocks += [WaveNetBlock(num_mels, causal_kernel, dilation,
                                          residual_channels, skip_channels)
                             for dilation in dilations]
+        self.blocks = nn.ModuleList(self.blocks)
 
         self.head = nn.Sequential(
             nn.ReLU(),
