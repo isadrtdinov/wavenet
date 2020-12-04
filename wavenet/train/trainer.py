@@ -66,8 +66,8 @@ class Trainer(object):
             if train:
                 loss.backward()
                 self.optimizer.step()
-                self.train_loss += loss.item() * waveforms.shape[0]
-                self.train_accuracy += accuracy.item() * waveforms.shape[0]
+                self.train_loss += loss.item()
+                self.train_accuracy += accuracy.item()
 
                 self.train_step += 1
                 if self.train_step % self.params.log_steps == 0:
