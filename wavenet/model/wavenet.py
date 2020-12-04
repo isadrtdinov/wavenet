@@ -11,7 +11,7 @@ class WaveNet(nn.Module):
         super().__init__()
         assert num_blocks % dilation_cycle == 0
 
-        padding = (upsample_kernel + 4 * hop_length - win_length)
+        padding = (upsample_kernel + 4 * hop_length - win_length) // 2
         self.upsample = nn.ConvTranspose1d(in_channels=num_mels, out_channels=num_mels,
                                            kernel_size=upsample_kernel, stride=hop_length,
                                            padding=padding)
