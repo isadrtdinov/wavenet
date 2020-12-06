@@ -25,6 +25,7 @@ class WaveNet(nn.Module):
                                          residual_channels, skip_channels)
                             for dilation in dilations]
         self.blocks = nn.ModuleList(self.blocks)
+        self.receptive_field = (2 ** dilation_cycle - 1) * num_cycles + 1
 
         self.head = nn.Sequential(
             nn.ReLU(),
@@ -38,11 +39,13 @@ class WaveNet(nn.Module):
         init_xavier(self.head[1])
         init_xavier(self.head[3])
 
-    def forward(self, waveforms, melspecs):
+    def forward(self, waveforms, melspecs=None, conditions=None):
         # waveforms: (batch_size, audio_length)
         # melspecs: (batch_size, num_mels, frames_length)
+        assert melspecs or conditions
 
-        conditions = self.upsample(melspecs)
+        if not conditions:
+            conditions = self.upsample(melspecs)
         length = min(waveforms.shape[-1], conditions.shape[-1])
         waveforms = waveforms[..., :length]
         conditions = conditions[..., :length]
@@ -63,9 +66,23 @@ class WaveNet(nn.Module):
 
         return logits
 
-    def inference(self, melspecs):
+    def inference(self, melspecs, quantizer):
         # melspecs: (batch_size, num_mels, frames_length)
-        pass
+
+        conditions = self.upsample(melspecs)
+        # conditions: (batch_size, num_mels, audio_length)
+
+        waveforms = torch.zeros((melspecs.shape[0], 1), dtype=torch.float).to(melspecs.device)
+        for i in range(conditions.shape[-1]):
+            input_waveforms = waveforms[:, -self.receptive_field:]
+            logits = self.forward(input_waveforms, conditions=conditions[..., i:i + input_waveforms.shape[-1]])
+            # logits: ((batch_size, num_quants, receptive_field)
+
+            quants = torch.argmax(logits[..., -1].detach(), dim=1).unsqueeze(-1)
+            waveforms = torch.cat([waveforms, quantizer.dequantize(quants)], dim=1)
+        # waveforms: (batch_size, audio_length)
+
+        return waveforms
 
 
 def build_wavenet(params):

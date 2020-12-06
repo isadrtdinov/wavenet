@@ -15,17 +15,21 @@ class Params:
     data_root = 'ljspeech/wavs/'
     metadata_file = 'ljspeech/metadata.csv'
 
-    # checkpoints
+    # checkpoint params
     checkpoint_dir = 'checkpoints/'
     checkpoint_template = 'checkpoints/wavenet{}.pt'
     model_checkpoint = 'checkpoints/wavenet1.pt'
     load_model = False
 
+    # example params
+    example_spectrogram = 'example/spectrogram.pt'
+    example_audio = 'example/audio.wav'
+
     # data processing
     valid_ratio = 0.05
     audio_length = 16384
 
-    # melspectogramer params
+    # MelSpectrogram params
     sample_rate = 22050
     win_length = 1024
     hop_length = 256
@@ -35,7 +39,7 @@ class Params:
     num_mels = 80
     power = 1.0
     pad_value = 1e-5
-    mu = 256
+    mu = 256  # MuLawQuantization parameter
 
     # WaveNet params
     upsample_kernel = 800
