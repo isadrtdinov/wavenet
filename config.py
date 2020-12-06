@@ -23,7 +23,7 @@ class Params:
 
     # example params
     example_spectrogram = 'example/spectrogram.pt'
-    example_audio = 'example/audio.wav'
+    example_audio = 'example/generated.wav'
 
     # data processing
     valid_ratio = 0.05
