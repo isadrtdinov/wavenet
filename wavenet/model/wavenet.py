@@ -42,9 +42,9 @@ class WaveNet(nn.Module):
     def forward(self, waveforms, melspecs=None, conditions=None):
         # waveforms: (batch_size, audio_length)
         # melspecs: (batch_size, num_mels, frames_length)
-        assert melspecs or conditions
+        assert melspecs is not None or conditions is not None
 
-        if not conditions:
+        if conditions is None:
             conditions = self.upsample(melspecs)
         length = min(waveforms.shape[-1], conditions.shape[-1])
         waveforms = waveforms[..., :length]

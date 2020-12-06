@@ -18,8 +18,8 @@ class Params:
     # checkpoint params
     checkpoint_dir = 'checkpoints/'
     checkpoint_template = 'checkpoints/wavenet{}.pt'
-    model_checkpoint = 'checkpoints/wavenet1.pt'
-    load_model = False
+    model_checkpoint = 'checkpoints/wavenet11.pt'
+    load_model = True
 
     # example params
     example_spectrogram = 'example/spectrogram.pt'
@@ -46,8 +46,8 @@ class Params:
     residual_channels = 120
     skip_channels = 240
     causal_kernel = 2
-    num_blocks = 16
-    dilation_cycle = 8
+    num_blocks = 20
+    dilation_cycle = 10
 
     # optimizer params
     lr = 3e-4
