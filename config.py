@@ -55,8 +55,8 @@ class Params:
     weight_decay = 0.0
 
     # training params
-    start_epoch = 1
-    num_epochs = 10
+    start_epoch = 14
+    num_epochs = 5
     log_steps = 100
     batch_size = 6
 
