@@ -18,7 +18,7 @@ class Params:
     # checkpoint params
     checkpoint_dir = 'checkpoints/'
     checkpoint_template = 'checkpoints/wavenet{}.pt'
-    model_checkpoint = 'checkpoints/wavenet11.pt'
+    model_checkpoint = 'checkpoints/wavenet13.pt'
     load_model = True
 
     # example params
@@ -51,13 +51,13 @@ class Params:
     dilation_cycle = 10
 
     # optimizer params
-    lr = 3e-4
+    lr = 1e-4
     weight_decay = 0.0
 
     # training params
     start_epoch = 1
     num_epochs = 10
-    log_steps = 500
+    log_steps = 100
     batch_size = 6
 
 
