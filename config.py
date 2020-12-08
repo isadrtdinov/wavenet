@@ -28,7 +28,7 @@ class Params:
 
     # data processing
     valid_ratio = 0.05
-    audio_length = 16384
+    audio_length = 15360
 
     # MelSpectrogram params
     sample_rate = 22050
@@ -51,11 +51,11 @@ class Params:
     dilation_cycle = 10
 
     # optimizer params
-    lr = 1e-4
+    lr = 5e-5
     weight_decay = 0.0
 
     # training params
-    start_epoch = 14
+    start_epoch = 21
     num_epochs = 5
     log_steps = 100
     batch_size = 6
