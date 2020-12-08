@@ -18,8 +18,8 @@ class Params:
     # checkpoint params
     checkpoint_dir = 'checkpoints/'
     checkpoint_template = 'checkpoints/wavenet{}.pt'
-    model_checkpoint = 'checkpoints/wavenet13.pt'
-    load_model = True
+    model_checkpoint ='wavenet.pt'
+    load_model = False
 
     # example params
     example_spectrogram = 'example/spectrogram.pt'
