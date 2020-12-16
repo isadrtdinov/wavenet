@@ -12,13 +12,13 @@ class Params:
     wandb_project = 'wavenet'
 
     # data location
-    data_root = '../../DB/electronic_music_8000/'
+    data_root = '../../DB/electronic_music_clean/'
     metadata_file = 'ljspeech/metadata.csv'
 
     # checkpoint params
     checkpoint_dir = 'checkpoints/'
     checkpoint_template = 'checkpoints/wavenet{}.pt'
-    model_checkpoint = 'wavenet.pt'
+    model_checkpoint = 'checkpoints/wavenet7.pt'
     load_model = False
 
     # example params
@@ -27,7 +27,7 @@ class Params:
     ground_truth_audio = 'example/ground_truth.wav'
     music_audio = 'example/music.wav'
     generated_audio = 'example/generated_music.wav'
-    generation_length = 32000
+    generation_length = 16000
 
     # data processing
     valid_ratio = 0.05
@@ -59,7 +59,7 @@ class Params:
 
     # training params
     start_epoch = 1
-    num_epochs = 10
+    num_epochs = 50
     log_steps = 100
     batch_size = 6
 

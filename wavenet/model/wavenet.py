@@ -53,7 +53,9 @@ class WaveNet(nn.Module):
     def inference(self, waveforms, quantizer, length):
         # waveforms: (batch_size, audio_length)
 
-        for i in range(waveforms.shape[-1] + length):
+        for i in range(length):
+            if i % 100 == 0:
+                print(i, '/', length, sep='')
             input_waveforms = waveforms[:, -self.receptive_field:]
             logits = self.forward(input_waveforms)
             # logits: ((batch_size, num_quants, receptive_field)

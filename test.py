@@ -16,8 +16,10 @@ def main():
     model.load_state_dict(checkpoint['model_state_dict'])
 
     # generate waveform
-    waveform = torchaudio.load(params.music_audio)
+    waveform, _ = torchaudio.load(params.music_audio)
     quantizer = MuLawQuantization(params.mu).to(params.device)
+    waveform = quantizer.forward(waveform.to(params.device))
+
     mu_law = model.inference(waveform, quantizer, params.generation_length)
     waveform = quantizer.inverse(mu_law).cpu()
     torchaudio.save(params.generated_audio, waveform, params.sample_rate)

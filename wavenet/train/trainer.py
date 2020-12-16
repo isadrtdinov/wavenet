@@ -50,8 +50,8 @@ class Trainer(object):
                 waveforms = waveforms.to(self.params.device)
 
                 mu_law = self.quantizer(waveforms)
-                inputs = mu_law[:-1]
-                targets = self.quantizer.quantize(mu_law[1:])
+                inputs = mu_law[:, :-1]
+                targets = self.quantizer.quantize(mu_law[:, 1:])
 
             with torch.set_grad_enabled(train):
                 self.optimizer.zero_grad()
@@ -89,4 +89,5 @@ class Trainer(object):
         for epoch in range(self.params.start_epoch, self.params.start_epoch + self.params.num_epochs):
             self.process_epoch(train_loader, train=True)
             self.process_epoch(valid_loader, train=False)
-            self.save_checkpoint(epoch)
+            if epoch % 5 == 0:
+                self.save_checkpoint(epoch)
