@@ -8,7 +8,7 @@ from wavenet.utils import MuLawQuantization
 def main():
     # set params
     params = set_params()
-    params.device = torch.device("cuda:1" if (torch.cuda.is_available()) else "cpu")
+    params.device = torch.device("cuda:0" if (torch.cuda.is_available()) else "cpu")
 
     # load model checkpoint
     model = build_wavenet(params).to(params.device)

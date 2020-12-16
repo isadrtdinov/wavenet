@@ -18,8 +18,8 @@ class Params:
     # checkpoint params
     checkpoint_dir = 'checkpoints/'
     checkpoint_template = 'checkpoints/wavenet{}.pt'
-    model_checkpoint = 'checkpoints/wavenet7.pt'
-    load_model = False
+    model_checkpoint = 'checkpoints/wavenet75.pt'
+    load_model = True
 
     # example params
     example_spectrogram = 'example/spectrogram.pt'
@@ -54,12 +54,12 @@ class Params:
     dilation_cycle = 10
 
     # optimizer params
-    lr = 3e-4
+    lr = 1e-4
     weight_decay = 0.0
 
     # training params
-    start_epoch = 1
-    num_epochs = 50
+    start_epoch = 51
+    num_epochs = 40
     log_steps = 100
     batch_size = 6
 

@@ -10,8 +10,8 @@ def main():
     os.environ['WANDB_API_KEY'] = '871c3c897b41570255fd1829026512c6f84d7a7f'
     wandb.init(project=params.wandb_project)
 
-    ground_truth, _ = torchaudio.load(params.generated_audio)
-    generated, _ = torchaudio.load(params.music_audio)
+    ground_truth, _ = torchaudio.load(params.music_audio)
+    generated, _ = torchaudio.load(params.generated_audio)
 
     ground_truth = ground_truth.squeeze(0).numpy()
     generated = generated.squeeze(0).numpy()
