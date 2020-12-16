@@ -12,7 +12,7 @@ class Params:
     wandb_project = 'wavenet'
 
     # data location
-    data_root = 'ljspeech/wavs/'
+    data_root = '../../DB/electronic_music_8000/'
     metadata_file = 'ljspeech/metadata.csv'
 
     # checkpoint params
@@ -31,7 +31,7 @@ class Params:
     audio_length = 15360
 
     # MelSpectrogram params
-    sample_rate = 22050
+    sample_rate = 8000
     win_length = 1024
     hop_length = 256
     n_fft = 1024
@@ -51,14 +51,14 @@ class Params:
     dilation_cycle = 10
 
     # optimizer params
-    lr = 5e-5
+    lr = 3e-4
     weight_decay = 0.0
 
     # training params
-    start_epoch = 21
-    num_epochs = 5
+    start_epoch = 1
+    num_epochs = 10
     log_steps = 100
-    batch_size = 6
+    batch_size = 8
 
 
 def set_params():

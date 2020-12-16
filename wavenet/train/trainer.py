@@ -3,7 +3,6 @@ import wandb
 import torch
 from torch import nn
 from ..utils.quantization import MuLawQuantization
-from ..utils.spectrogram import MelSpectrogram
 
 
 class Trainer(object):
@@ -12,7 +11,6 @@ class Trainer(object):
         self.model = model.to(params.device)
         self.optimizer = torch.optim.Adam(model.parameters(), lr=params.lr,
                                           weight_decay=params.weight_decay)
-        self.spectrogramer = MelSpectrogram(params).to(params.device)
         self.quantizer = MuLawQuantization(params.mu).to(params.device)
         self.criterion = nn.CrossEntropyLoss()
         self.train_step = 0
@@ -20,6 +18,7 @@ class Trainer(object):
         self.valid_loss, self.valid_accuracy = 0.0, 0.0
 
         if params.use_wandb:
+            os.environ['WANDB_API_KEY'] = '871c3c897b41570255fd1829026512c6f84d7a7f'
             wandb.init(project=params.wandb_project)
             wandb.watch(self.model)
 
@@ -49,16 +48,14 @@ class Trainer(object):
         for waveforms in loader:
             with torch.no_grad():
                 waveforms = waveforms.to(self.params.device)
-                melspecs = self.spectrogramer(waveforms)
 
                 mu_law = self.quantizer(waveforms)
-                zeros = torch.zeros((mu_law.shape[0], 1)).to(self.params.device)
-                inputs = torch.cat([zeros, mu_law[:, :-1]], dim=1)
-                targets = self.quantizer.quantize(mu_law)
+                inputs = mu_law[:-1]
+                targets = self.quantizer.quantize(mu_law[1:])
 
             with torch.set_grad_enabled(train):
                 self.optimizer.zero_grad()
-                logits = self.model(inputs, melspecs=melspecs)
+                logits = self.model(inputs)
                 targets = targets[:, :logits.shape[-1]]
                 loss = self.criterion(logits, targets)
                 accuracy = (torch.argmax(logits, dim=1) == targets).to(torch.float).mean()

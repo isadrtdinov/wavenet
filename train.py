@@ -5,7 +5,7 @@ from wavenet.utils import (
     set_random_seed,
     load_data,
     split_data,
-    LJSpeechDataset
+    ElectroDataset
 )
 from config import set_params
 
@@ -18,15 +18,9 @@ def main():
     if params.verbose:
         print('Using device', params.device)
 
-    # load and split data
-    data = load_data(params.metadata_file)
-    train_data, valid_data = split_data(data, params.valid_ratio)
-    if params.verbose:
-        print('Data loaded and split')
-
     # prepare dataloaders
-    train_dataset = LJSpeechDataset(labels=train_data, params=params)
-    valid_dataset = LJSpeechDataset(labels=valid_data, params=params)
+    train_dataset = ElectroDataset(params=params, mode='train')
+    valid_dataset = ElectroDataset(params=params, mode='valid')
 
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=params.batch_size,
                                                num_workers=params.num_workers, pin_memory=True)
