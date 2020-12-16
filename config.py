@@ -18,13 +18,16 @@ class Params:
     # checkpoint params
     checkpoint_dir = 'checkpoints/'
     checkpoint_template = 'checkpoints/wavenet{}.pt'
-    model_checkpoint ='wavenet.pt'
+    model_checkpoint = 'wavenet.pt'
     load_model = False
 
     # example params
     example_spectrogram = 'example/spectrogram.pt'
     example_audio = 'example/generated.wav'
     ground_truth_audio = 'example/ground_truth.wav'
+    music_audio = 'example/music.wav'
+    generated_audio = 'example/generated_music.wav'
+    generation_length = 32000
 
     # data processing
     valid_ratio = 0.05
