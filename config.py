@@ -58,7 +58,7 @@ class Params:
     start_epoch = 1
     num_epochs = 10
     log_steps = 100
-    batch_size = 8
+    batch_size = 6
 
 
 def set_params():

@@ -11,7 +11,7 @@ class ElectroDataset(torch.utils.data.Dataset):
         self.data_root = params.data_root
         self.files = sorted(os.listdir(self.data_root))
 
-        valid_samples = len(self.files) * params.valid_ratio
+        valid_samples = int(len(self.files) * params.valid_ratio)
         if mode == 'train':
             self.files = self.files[:-valid_samples]
         elif mode == 'valid':

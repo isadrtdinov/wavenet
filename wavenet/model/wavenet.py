@@ -29,7 +29,6 @@ class WaveNet(nn.Module):
             nn.Conv1d(num_quants, num_quants, kernel_size=1),
         )
 
-        init_xavier(self.upsample)
         init_xavier(self.input_conv)
         init_xavier(self.head[1])
         init_xavier(self.head[3])

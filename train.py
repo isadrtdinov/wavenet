@@ -14,7 +14,7 @@ def main():
     # set params and random seed
     params = set_params()
     set_random_seed(params.random_seed)
-    params.device = torch.device("cuda:0" if (torch.cuda.is_available()) else "cpu")
+    params.device = torch.device("cuda:1" if (torch.cuda.is_available()) else "cpu")
     if params.verbose:
         print('Using device', params.device)
 

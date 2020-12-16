@@ -11,7 +11,7 @@ class CausalConv1d(nn.Module):
         init_xavier(self.conv)
 
     def forward(self, inputs):
-        padding = torch.zeros((1, 1, self.padding)).to(inputs.device)
+        padding = torch.zeros((inputs.shape[0], inputs.shape[1], self.padding)).to(inputs.device)
         inputs = torch.cat([padding, inputs], dim=-1)
         return self.conv(inputs)
 
@@ -26,7 +26,6 @@ class WaveNetBlock(nn.Module):
         self.skip_conv = nn.Conv1d(residual_channels, skip_channels, kernel_size=1)
         self.residual_conv = nn.Conv1d(residual_channels, residual_channels, kernel_size=1)
 
-        init_xavier(self.conditional_conv)
         init_xavier(self.skip_conv)
         init_xavier(self.residual_conv)
 
@@ -36,8 +35,8 @@ class WaveNetBlock(nn.Module):
         conv_inputs = self.causal_conv(inputs)
         # conv_inputs: (batch_size, 2 * residual_channels, audio_length)
 
-        gates = torch.tanh(conv_inputs[:self.residual_channels]) * \
-                torch.sigmoid(conv_inputs[self.residual_channels:])
+        gates = torch.tanh(conv_inputs[:, :self.residual_channels]) * \
+                torch.sigmoid(conv_inputs[:, self.residual_channels:])
         # gates: (batch_size, 2 * residual_channels, audio_length)
 
         skips = self.skip_conv(gates)
